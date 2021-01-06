@@ -1,21 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-
 const LINE_RE = /^#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$/;
-
-const lines = fs
-  .readFileSync(path.resolve("input/day03.txt"), "utf-8")
-  .split("\n");
 
 const forEachLocation = (startX, startY, w, h, callback) => {
   for (let x = startX; x < startX + w; x++) {
     for (let y = startY; y < startY + h; y++) {
-      callback(x + "," + y);
+      callback([x, y].join(","));
     }
   }
 };
 
-const part1 = () => {
+export function part1(lines) {
   const covered = {};
 
   for (const line of lines) {
@@ -26,14 +19,13 @@ const part1 = () => {
     });
   }
 
-  const result = Object.entries(covered).reduce(
+  return Object.entries(covered).reduce(
     (count, [_, v]) => (v > 1 ? count + 1 : count),
     0
   );
-  console.log(result);
-};
+}
 
-const part2 = () => {
+export function part2(lines) {
   const claims = [];
   const claimLocations = {};
 
@@ -55,11 +47,7 @@ const part2 = () => {
         claimLocations[key][0] === id;
     });
     if (unique) {
-      console.log(id);
-      break;
+      return id;
     }
   }
-};
-
-part1();
-part2();
+}

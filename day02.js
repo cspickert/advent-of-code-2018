@@ -1,11 +1,4 @@
-const fs = require("fs");
-const path = require("path");
-
-const lines = fs
-  .readFileSync(path.resolve("input/day02.txt"), "utf-8")
-  .split("\n");
-
-const part1 = () => {
+export function part1(lines) {
   const letterCounts = {};
 
   for (const line of lines) {
@@ -16,15 +9,15 @@ const part1 = () => {
       (counts, [_, count]) => ({ ...counts, [count]: 1 }),
       {}
     );
-    Object.entries(uniqueCharCounts).forEach(
-      ([count, _]) => (letterCounts[count] = (letterCounts[count] || 0) + 1)
-    );
+    for (const [count, _] of Object.entries(uniqueCharCounts)) {
+      letterCounts[count] = (letterCounts[count] || 0) + 1;
+    }
   }
 
-  console.log(letterCounts[2] * letterCounts[3]);
-};
+  return letterCounts[2] * letterCounts[3];
+}
 
-const part2 = () => {
+export function part2(lines) {
   const getDiff = (s1, s2) =>
     Array.from({ length: s1.length }, (_, i) => i).reduce(
       (diffs, i) => (s1[i] === s2[i] ? diffs : [...diffs, i]),
@@ -33,14 +26,10 @@ const part2 = () => {
 
   for (let i = 0; i < lines.length; i++) {
     for (let j = i + 1; j < lines.length; j++) {
-      const [k, ...rest] = getDiff(lines[i], lines[j]);
-      if (rest.length === 0) {
-        console.log(lines[i].slice(0, k) + lines[i].slice(k + 1));
-        break;
+      const diff = getDiff(lines[i], lines[j]);
+      if (diff.length === 1) {
+        return lines[i].slice(0, diff[0]) + lines[i].slice(diff[0] + 1);
       }
     }
   }
-};
-
-part1();
-part2();
+}

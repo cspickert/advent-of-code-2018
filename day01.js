@@ -1,32 +1,18 @@
-const fs = require("fs");
-const path = require("path");
+export function part1(lines) {
+  return lines.reduce((frequency, line) => frequency + Number(line), 0);
+}
 
-const lines = fs
-  .readFileSync(path.resolve("input/day01.txt"), "utf-8")
-  .split("\n");
-
-const part1 = () =>
-  console.log(lines.reduce((frequency, line) => frequency + Number(line), 0));
-
-const part2 = () => {
+export function part2(lines) {
   let frequency = 0;
   const counts = { frequency: 1 };
-  let done = false;
-
-  while (!done) {
+  while (true) {
     for (const line of lines) {
       frequency += new Number(line);
       const count = (counts[frequency] || 0) + 1;
       if (count > 1) {
-        done = true;
-        break;
+        return frequency;
       }
       counts[frequency] = count;
     }
   }
-
-  console.log(frequency);
-};
-
-part1();
-part2();
+}
