@@ -61,10 +61,3 @@ class Solution(BaseSolution):
 
     def get_active_steps(self, tasks):
         return {step for _, step in tasks}
-
-
-if __name__ == "__main__":
-    from run import run
-
-    run(["day07"])
-
