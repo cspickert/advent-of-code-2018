@@ -45,9 +45,3 @@ class Solution(BaseSolution):
     def part2(self, root):
         return root.part2_value()
 
-
-if __name__ == "__main__":
-    from run import run
-
-    run(["day08"])
-
