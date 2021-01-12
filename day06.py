@@ -8,17 +8,16 @@ class Solution(BaseSolution):
         return [tuple(map(int, line.split(", "))) for line in input.splitlines()]
 
     def part1(self, data):
-        min_x = min(x for x, _ in data) - 1
-        min_y = min(y for _, y in data) - 1
-        max_x = max(x for x, _ in data) + 1
-        max_y = max(y for _, y in data) + 1
+        (min_x, min_y), (max_x, max_y) = self.get_bounds(data)
 
         distances = defaultdict(list)
 
         for x in range(min_x, max_x + 1):
             for y in range(min_y, max_y + 1):
                 for i, (data_x, data_y) in enumerate(data):
-                    distances[x, y].append((i, abs(x - data_x) + abs(y - data_y)))
+                    distances[x, y].append(
+                        (i, self.get_distance((x, y), (data_x, data_y)))
+                    )
 
         min_distances = {}
 
@@ -50,3 +49,30 @@ class Solution(BaseSolution):
                         area_by_idx[i] += 1
 
         return max(area_by_idx.values())
+
+    def part2(self, data):
+        (min_x, min_y), (max_x, max_y) = self.get_bounds(data)
+
+        area = 0
+
+        for x in range(min_x, max_x + 1):
+            for y in range(min_y, max_y + 1):
+                total_distance = sum(
+                    self.get_distance((x, y), (data_x, data_y))
+                    for data_x, data_y in data
+                )
+                if total_distance < 10000:
+                    area += 1
+
+        return area
+
+    def get_bounds(self, data):
+        min_x = min(x for x, _ in data) - 1
+        min_y = min(y for _, y in data) - 1
+        max_x = max(x for x, _ in data) + 1
+        max_y = max(y for _, y in data) + 1
+        return (min_x, min_y), (max_x, max_y)
+
+    def get_distance(self, p1, p2):
+        (x1, y1), (x2, y2) = p1, p2
+        return abs(x2 - x1) + abs(y2 - y1)
